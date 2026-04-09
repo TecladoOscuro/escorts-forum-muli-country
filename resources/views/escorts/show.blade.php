@@ -157,7 +157,7 @@
                             </a>
                         @endauth
 
-                        @forelse($escortProfile->reviews->sortByDesc('created_at') as $review)
+                        @forelse($reviews as $review)
                             <div class="glass-card p-5">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center gap-2">
@@ -181,6 +181,12 @@
                                 {{ __('No reviews available yet.') }}
                             </div>
                         @endforelse
+
+                        @if($reviews->hasPages())
+                            <div class="mt-4">
+                                {{ $reviews->withQueryString()->links() }}
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Blog Tab --}}
@@ -191,16 +197,24 @@
                                 <p class="text-xs text-[var(--color-text-secondary)] mt-3">{{ $escortProfile->blogThread->created_at->format('d.m.Y') }}</p>
                             </div>
 
-                            @foreach($escortProfile->blogThread->posts as $post)
-                                <div class="glass-card p-5">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <img src="{{ $post->user->avatar_url }}" alt="" class="w-7 h-7 rounded-full">
-                                        <span class="text-sm font-medium text-[var(--color-text)]">{{ $post->user->username }}</span>
-                                        <span class="text-xs text-[var(--color-text-secondary)]">{{ $post->created_at->diffForHumans() }}</span>
+                            @if($blogPosts)
+                                @foreach($blogPosts as $post)
+                                    <div class="glass-card p-5">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <img src="{{ $post->user->avatar_url }}" alt="" class="w-7 h-7 rounded-full">
+                                            <span class="text-sm font-medium text-[var(--color-text)]">{{ $post->user->username }}</span>
+                                            <span class="text-xs text-[var(--color-text-secondary)]">{{ $post->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="text-sm text-[var(--color-text-secondary)]">{{ $post->body }}</p>
                                     </div>
-                                    <p class="text-sm text-[var(--color-text-secondary)]">{{ $post->body }}</p>
-                                </div>
-                            @endforeach
+                                @endforeach
+
+                                @if($blogPosts->hasPages())
+                                    <div class="mt-4">
+                                        {{ $blogPosts->withQueryString()->links() }}
+                                    </div>
+                                @endif
+                            @endif
 
                             @auth
                                 <form method="POST" action="{{ route('forum.reply', [$escortProfile->blogThread->category, $escortProfile->blogThread]) }}" class="glass-card p-5">

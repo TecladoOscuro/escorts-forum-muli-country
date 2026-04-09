@@ -21,10 +21,52 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Nationality') }}</label>
+                        <select name="nationality" class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                            <option value="">{{ __('All Nationalities') }}</option>
+                            @foreach($nationalities as $nat)
+                                <option value="{{ $nat }}" {{ request('nationality') == $nat ? 'selected' : '' }}>{{ $nat }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Language') }}</label>
+                        <select name="language" class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                            <option value="">{{ __('All Languages') }}</option>
+                            @foreach($languages as $lang)
+                                <option value="{{ $lang }}" {{ request('language') == $lang ? 'selected' : '' }}>{{ strtoupper($lang) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Service') }}</label>
+                        <select name="service" class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                            <option value="">{{ __('All Services') }}</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>{{ $service }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Age') }}</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" name="age_min" value="{{ request('age_min') }}" placeholder="{{ __('from') }}" min="18" max="99"
+                                class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                            <span class="text-[var(--color-text-secondary)] text-sm">–</span>
+                            <input type="number" name="age_max" value="{{ request('age_max') }}" placeholder="{{ __('to') }}" min="18" max="99"
+                                class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                        </div>
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Sort By') }}</label>
                         <select name="sort" class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
                             <option value="top" {{ request('sort', 'top') == 'top' ? 'selected' : '' }}>{{ __('Top & Featured') }}</option>
                             <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>{{ __('Best Rating') }}</option>
+                            <option value="reviews" {{ request('sort') == 'reviews' ? 'selected' : '' }}>{{ __('Most Reviews') }}</option>
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('Newest') }}</option>
                             <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>{{ __('Most Visits') }}</option>
                         </select>
@@ -40,7 +82,7 @@
                         {{ __('Apply Filter') }}
                     </button>
 
-                    @if(request()->hasAny(['city', 'sort', 'service', 'verified']))
+                    @if(request()->hasAny(['city', 'sort', 'service', 'verified', 'nationality', 'language', 'age_min', 'age_max']))
                         <a href="{{ route('escorts.index') }}" class="block text-center text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-accent)]">{{ __('Reset filters') }}</a>
                     @endif
                 </form>

@@ -8,13 +8,47 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reviews = Review::with(['user', 'escortProfile'])
-            ->orderByDesc('created_at')
-            ->paginate(20);
+        $query = Review::with(['user', 'escortProfile']);
 
-        return view('reviews.index', compact('reviews'));
+        if ($request->filled('rating')) {
+            $query->where('rating', (int) $request->rating);
+        }
+
+        if ($request->filled('escort')) {
+            $query->where('escort_profile_id', $request->escort);
+        }
+
+        if ($request->filled('city')) {
+            $query->whereHas('escortProfile', fn ($q) => $q->where('city', $request->city));
+        }
+
+        $sort = $request->get('sort', 'newest');
+        $query = match ($sort) {
+            'oldest' => $query->orderBy('created_at'),
+            'rating_high' => $query->orderByDesc('rating')->orderByDesc('created_at'),
+            'rating_low' => $query->orderBy('rating')->orderByDesc('created_at'),
+            default => $query->orderByDesc('created_at'),
+        };
+
+        $reviews = $query->paginate(15);
+
+        $cities = EscortProfile::where('is_active', true)
+            ->select('city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        $ratingStats = Review::selectRaw('rating, count(*) as count')
+            ->groupBy('rating')
+            ->orderByDesc('rating')
+            ->pluck('count', 'rating');
+
+        $totalReviews = Review::count();
+        $avgRating = Review::avg('rating');
+
+        return view('reviews.index', compact('reviews', 'cities', 'ratingStats', 'totalReviews', 'avgRating'));
     }
 
     public function create(EscortProfile $escortProfile)
@@ -48,6 +82,6 @@ class ReviewController extends Controller
         ]);
 
         return redirect()->route('escorts.show', $escortProfile)
-            ->with('success', 'Bewertung erfolgreich veröffentlicht!');
+            ->with('success', __('Review published successfully!'));
     }
 }
