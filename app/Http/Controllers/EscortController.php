@@ -9,6 +9,7 @@ class EscortController extends Controller
 {
     public function index(Request $request)
     {
+        $tenant = app('currentTenant');
         $query = EscortProfile::with('photos')->where('is_active', true);
 
         if ($request->filled('city')) {
@@ -37,6 +38,20 @@ class EscortController extends Controller
 
         if ($request->filled('age_max')) {
             $query->where('age', '<=', (int) $request->age_max);
+        }
+
+        if ($tenant->feature('show_price_filter')) {
+            if ($request->filled('price_min')) {
+                $query->whereNotNull('rates')->where(function ($q) use ($request) {
+                    $q->whereRaw("EXISTS (SELECT 1 FROM json_each(rates) WHERE CAST(json_each.value AS INTEGER) >= ?)", [(int) $request->price_min]);
+                });
+            }
+
+            if ($request->filled('price_max')) {
+                $query->whereNotNull('rates')->where(function ($q) use ($request) {
+                    $q->whereRaw("EXISTS (SELECT 1 FROM json_each(rates) WHERE CAST(json_each.value AS INTEGER) <= ?)", [(int) $request->price_max]);
+                });
+            }
         }
 
         $sort = $request->get('sort', 'top');

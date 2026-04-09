@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\BelongsToTenant;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class EscortProfile extends Model
 {
-    use BelongsToTenant, HasSlug;
+    use BelongsToTenant, HasFactory, HasSlug;
 
     protected $fillable = [
         'tenant_id',
@@ -32,6 +33,9 @@ class EscortProfile extends Model
         'contact_email',
         'is_verified',
         'is_active',
+        'views_count',
+        'reviews_count',
+        'avg_rating',
     ];
 
     protected function casts(): array

@@ -255,5 +255,9 @@
     "total": "total",
     "Review published successfully!": "Review published successfully!",
     "No reviews found.": "No reviews found.",
-    "Clear filters": "Clear filters"
+    "Clear filters": "Clear filters",
+
+    "Price": "Price",
+    "Contact via WhatsApp": "Contact via WhatsApp",
+    "Contact via Telegram": "Contact via Telegram"
 }

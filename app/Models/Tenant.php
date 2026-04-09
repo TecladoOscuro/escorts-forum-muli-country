@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tenant extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'name',
         'slug',
@@ -42,5 +44,22 @@ class Tenant extends Model
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function feature(string $key, mixed $default = false): mixed
+    {
+        return data_get($this->settings, "features.$key", $default);
+    }
+
+    public static function defaultSettings(): array
+    {
+        return [
+            'features' => [
+                'show_prices' => true,
+                'show_price_filter' => true,
+                'show_contact_buttons' => true,
+                'show_service_tags' => true,
+            ],
+        ];
     }
 }

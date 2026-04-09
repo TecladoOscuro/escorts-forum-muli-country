@@ -26,7 +26,16 @@ class DatabaseSeeder extends Seeder
             'timezone' => 'Europe/Berlin',
             'token_price_cents' => 15,
             'is_active' => true,
-            'settings' => ['country_code' => 'DE', 'phone_prefix' => '+49'],
+            'settings' => [
+                'country_code' => 'DE',
+                'phone_prefix' => '+49',
+                'features' => [
+                    'show_prices' => true,
+                    'show_price_filter' => true,
+                    'show_contact_buttons' => true,
+                    'show_service_tags' => true,
+                ],
+            ],
         ]);
 
         // Token Packages
@@ -63,23 +72,34 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Admin
+        // Admin (tu usuario)
         $admin = User::create([
-            'tenant_id' => $tenant->id, 'username' => 'admin', 'name' => 'Administrator',
-            'email' => 'admin@forumescort.de', 'password' => Hash::make('password'),
+            'tenant_id' => $tenant->id, 'username' => 'fabri', 'name' => 'Fabri',
+            'email' => 'admin@forumescort.de', 'password' => Hash::make('admin123'),
             'role' => 'admin', 'email_verified_at' => now(), 'token_balance' => 99999,
+        ]);
+
+        // Moderator
+        User::create([
+            'tenant_id' => $tenant->id, 'username' => 'moderator', 'name' => 'Moderator',
+            'email' => 'mod@forumescort.de', 'password' => Hash::make('password'),
+            'role' => 'moderator', 'email_verified_at' => now(), 'token_balance' => 5000,
         ]);
 
         // Escorts
         $escortData = [
-            ['username' => 'sofia_berlin', 'name' => 'Sofia', 'email' => 'sofia@example.com', 'display_name' => 'Sofia', 'city' => 'Berlin', 'neighborhood' => 'Mitte', 'age' => 26, 'nationality' => 'Spanisch', 'languages' => ['de', 'es', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Massage', 'Reisebegleitung'], 'rates' => ['1h' => 200, '2h' => 350, '3h' => 500, 'overnight' => 1200], 'contact_telegram' => '@sofia_berlin', 'is_verified' => true, 'featured' => true,
+            ['username' => 'sofia_berlin', 'name' => 'Sofia', 'email' => 'sofia@example.com', 'display_name' => 'Sofia', 'city' => 'Berlin', 'neighborhood' => 'Mitte', 'age' => 26, 'nationality' => 'Spanisch', 'languages' => ['de', 'es', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Massage', 'Reisebegleitung'], 'rates' => ['1h' => 200, '2h' => 350, '3h' => 500, 'overnight' => 1200], 'contact_telegram' => '@sofia_berlin', 'contact_phone' => '+49 176 11111111', 'is_verified' => true, 'featured' => true,
                 'description' => 'Hallo! Ich bin Sofia, eine leidenschaftliche und elegante Begleiterin in Berlin-Mitte. Ich biete unvergessliche Momente in einer diskreten und angenehmen Atmosphäre.'],
-            ['username' => 'luna_munich', 'name' => 'Luna', 'email' => 'luna@example.com', 'display_name' => 'Luna', 'city' => 'München', 'neighborhood' => 'Schwabing', 'age' => 24, 'nationality' => 'Deutsch', 'languages' => ['de', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Massage'], 'rates' => ['1h' => 180, '2h' => 320, '3h' => 450], 'contact_phone' => '+49 170 1234567', 'is_verified' => true, 'featured' => false,
+            ['username' => 'luna_munich', 'name' => 'Luna', 'email' => 'luna@example.com', 'display_name' => 'Luna', 'city' => 'München', 'neighborhood' => 'Schwabing', 'age' => 24, 'nationality' => 'Deutsch', 'languages' => ['de', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Massage'], 'rates' => ['1h' => 180, '2h' => 320, '3h' => 450], 'contact_phone' => '+49 170 1234567', 'contact_telegram' => '@luna_munich', 'is_verified' => true, 'featured' => false,
                 'description' => 'Hey, ich bin Luna! Eine natürliche und warmherzige Münchnerin, die es liebt, neue Menschen kennenzulernen.'],
-            ['username' => 'mia_hamburg', 'name' => 'Mia', 'email' => 'mia@example.com', 'display_name' => 'Mia', 'city' => 'Hamburg', 'neighborhood' => 'St. Pauli', 'age' => 29, 'nationality' => 'Brasilianisch', 'languages' => ['de', 'pt', 'en'], 'services' => ['Begleitung', 'Massage', 'Tantramassage', 'Reisebegleitung'], 'rates' => ['1h' => 220, '2h' => 400, 'overnight' => 1500], 'contact_telegram' => '@mia_hamburg', 'is_verified' => false, 'featured' => false,
+            ['username' => 'mia_hamburg', 'name' => 'Mia', 'email' => 'mia@example.com', 'display_name' => 'Mia', 'city' => 'Hamburg', 'neighborhood' => 'St. Pauli', 'age' => 29, 'nationality' => 'Brasilianisch', 'languages' => ['de', 'pt', 'en'], 'services' => ['Begleitung', 'Massage', 'Tantramassage', 'Reisebegleitung'], 'rates' => ['1h' => 220, '2h' => 400, 'overnight' => 1500], 'contact_telegram' => '@mia_hamburg', 'contact_phone' => '+49 151 22222222', 'is_verified' => false, 'featured' => false,
                 'description' => 'Olá! Ich bin Mia aus Hamburg. Exotisch, sinnlich und immer gut gelaunt.'],
-            ['username' => 'elena_frankfurt', 'name' => 'Elena', 'email' => 'elena@example.com', 'display_name' => 'Elena', 'city' => 'Frankfurt', 'neighborhood' => 'Bahnhofsviertel', 'age' => 27, 'nationality' => 'Russisch', 'languages' => ['de', 'ru', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Events', 'Reisebegleitung'], 'rates' => ['1h' => 250, '2h' => 450, '3h' => 600, 'overnight' => 1800], 'contact_email' => 'elena.ffm@proton.me', 'is_verified' => true, 'featured' => true,
+            ['username' => 'elena_frankfurt', 'name' => 'Elena', 'email' => 'elena@example.com', 'display_name' => 'Elena', 'city' => 'Frankfurt', 'neighborhood' => 'Bahnhofsviertel', 'age' => 27, 'nationality' => 'Russisch', 'languages' => ['de', 'ru', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Events', 'Reisebegleitung'], 'rates' => ['1h' => 250, '2h' => 450, '3h' => 600, 'overnight' => 1800], 'contact_email' => 'elena.ffm@proton.me', 'contact_telegram' => '@elena_ffm', 'contact_phone' => '+49 157 33333333', 'is_verified' => true, 'featured' => true,
                 'description' => 'Ich bin Elena, eine kultivierte und weltoffene Dame aus Frankfurt. Perfekt für ein elegantes Dinner.'],
+            ['username' => 'anna_koeln', 'name' => 'Anna', 'email' => 'anna@example.com', 'display_name' => 'Anna', 'city' => 'Köln', 'neighborhood' => 'Altstadt', 'age' => 23, 'nationality' => 'Polnisch', 'languages' => ['de', 'pl', 'en'], 'services' => ['Begleitung', 'Dinner Date', 'Massage', 'GFE'], 'rates' => ['1h' => 160, '2h' => 280, '3h' => 400], 'contact_telegram' => '@anna_koeln', 'contact_phone' => '+49 160 44444444', 'is_verified' => true, 'featured' => false,
+                'description' => 'Cześć! Ich bin Anna aus Köln. Jung, frech und voller Energie. Ich freue mich auf deine Nachricht!'],
+            ['username' => 'nina_duesseldorf', 'name' => 'Nina', 'email' => 'nina@example.com', 'display_name' => 'Nina', 'city' => 'Düsseldorf', 'neighborhood' => 'Königsallee', 'age' => 31, 'nationality' => 'Deutsch', 'languages' => ['de', 'en', 'fr'], 'services' => ['Begleitung', 'Events', 'Dinner Date', 'Reisebegleitung', 'Übernachtung'], 'rates' => ['1h' => 300, '2h' => 550, 'overnight' => 2000], 'contact_phone' => '+49 172 55555555', 'contact_telegram' => '@nina_dus', 'is_verified' => true, 'featured' => true,
+                'description' => 'Bonjour! Ich bin Nina, eine erfahrene und stilvolle Begleiterin aus Düsseldorf. High-Class Service mit Niveau.'],
         ];
 
         $escortUsers = [];

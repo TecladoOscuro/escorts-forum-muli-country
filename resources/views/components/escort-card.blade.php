@@ -45,7 +45,11 @@
     <div class="p-3">
         <div class="flex flex-wrap gap-1.5">
             @foreach(array_slice($escort->services ?? [], 0, 3) as $service)
-                <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-surface-hover)] text-[var(--color-text-secondary)]">{{ $service }}</span>
+                @if($currentTenant->feature('show_service_tags'))
+                    <a href="{{ route('escorts.index', ['service' => $service]) }}" onclick="event.stopPropagation()" class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-surface-hover)] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10 transition-colors relative z-10">{{ $service }}</a>
+                @else
+                    <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-surface-hover)] text-[var(--color-text-secondary)]">{{ $service }}</span>
+                @endif
             @endforeach
             @if(count($escort->services ?? []) > 3)
                 <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-surface-hover)] text-[var(--color-text-secondary)]">+{{ count($escort->services) - 3 }}</span>

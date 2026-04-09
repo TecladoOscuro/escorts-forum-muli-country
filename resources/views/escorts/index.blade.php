@@ -61,6 +61,19 @@
                         </div>
                     </div>
 
+                    @if($currentTenant->feature('show_price_filter'))
+                        <div>
+                            <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Price') }} (€)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" name="price_min" value="{{ request('price_min') }}" placeholder="{{ __('from') }}" min="0"
+                                    class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                                <span class="text-[var(--color-text-secondary)] text-sm">–</span>
+                                <input type="number" name="price_max" value="{{ request('price_max') }}" placeholder="{{ __('to') }}" min="0"
+                                    class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
+                            </div>
+                        </div>
+                    @endif
+
                     <div>
                         <label class="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{{ __('Sort By') }}</label>
                         <select name="sort" class="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)]">
@@ -82,7 +95,7 @@
                         {{ __('Apply Filter') }}
                     </button>
 
-                    @if(request()->hasAny(['city', 'sort', 'service', 'verified', 'nationality', 'language', 'age_min', 'age_max']))
+                    @if(request()->hasAny(['city', 'sort', 'service', 'verified', 'nationality', 'language', 'age_min', 'age_max', 'price_min', 'price_max']))
                         <a href="{{ route('escorts.index') }}" class="block text-center text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-accent)]">{{ __('Reset filters') }}</a>
                     @endif
                 </form>

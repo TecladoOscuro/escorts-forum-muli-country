@@ -255,5 +255,9 @@
     "total": "gesamt",
     "Review published successfully!": "Bewertung erfolgreich veröffentlicht!",
     "No reviews found.": "Keine Bewertungen gefunden.",
-    "Clear filters": "Filter löschen"
+    "Clear filters": "Filter löschen",
+
+    "Price": "Preis",
+    "Contact via WhatsApp": "Kontakt über WhatsApp",
+    "Contact via Telegram": "Kontakt über Telegram"
 }
